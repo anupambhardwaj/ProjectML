@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "876077692584",
+    "firebase_url": "https://projectml-461c2.firebaseio.com",
+    "project_id": "projectml-461c2",
+    "storage_bucket": "projectml-461c2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:876077692584:android:234a12442c060c96",
+        "android_client_info": {
+          "package_name": "anupam.com.projectml"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "876077692584-4a4c821toanl55vf2mtdghpfnaq3l4j4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "anupam.com.projectml",
+            "certificate_hash": "c2e96df98691131933241c4be57ed0dd37ba0ee3"
+          }
+        },
+        {
+          "client_id": "876077692584-gqogd0m5g9i0n2n2kphl0c4cqp00q0fv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5WE722ipiWY9S13_0X-dm8gt-mKSL3JM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "876077692584-gqogd0m5g9i0n2n2kphl0c4cqp00q0fv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
