@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ProjectML</string>
+    <string name="app_name">OneLens</string>
     <string name="qr_code">QR Code</string>
     <string name="monument">Monument</string>
     <string name="object">Object</string>
