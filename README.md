@@ -5,6 +5,6 @@ It can scan QR Codes, Label Objects and Recognising Monuments in a single applic
 # Built Status
 It is still in development with minor bugs.
 
-#Tech/Framework Used
+# Tech/Framework Used
 This application is build with Android Studio using JAVA as its main programing language and XML as its main UI language.
 This application also uses Firebase ML Kit for all the machine learning processing.
