@@ -1,9 +1,8 @@
+
 package anupam.com.projectml;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -19,14 +18,15 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.ml.vision.FirebaseVision;
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetector;
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions;
+import com.google.firebase.ml.vision.cloud.FirebaseVisionCloudDetectorOptions;
+import com.google.firebase.ml.vision.cloud.landmark.FirebaseVisionCloudLandmark;
+import com.google.firebase.ml.vision.cloud.landmark.FirebaseVisionCloudLandmarkDetector;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.firebase.ml.vision.common.FirebaseVisionLatLng;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MonumentActivity extends AppCompatActivity {
 
     private ImageView mImageView;
     private FloatingActionButton mCapture;
@@ -34,12 +34,14 @@ public class MainActivity extends AppCompatActivity {
     private Button mObject;
     private Button mQRCode;
     private TextView mText;
+    private TextView mLong;
+    private TextView mLat;
     private Bitmap imageBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_monument);
 
         mImageView = (ImageView)findViewById(R.id.imageView);
         mCapture = (FloatingActionButton) findViewById(R.id.capture);
@@ -47,44 +49,40 @@ public class MainActivity extends AppCompatActivity {
         mObject = (Button)findViewById(R.id.object_btn);
         mQRCode = (Button)findViewById(R.id.qr_code);
         mText = (TextView)findViewById(R.id.textView);
+        mLong = (TextView)findViewById(R.id.textView2);
+        mLat= (TextView)findViewById(R.id.textView3);
 
-        FirebaseVisionBarcodeDetectorOptions options =
-                new FirebaseVisionBarcodeDetectorOptions.Builder()
-                        .setBarcodeFormats(
-                                FirebaseVisionBarcode.FORMAT_QR_CODE,
-                                FirebaseVisionBarcode.FORMAT_AZTEC,
-                                FirebaseVisionBarcode.FORMAT_CODE_39,
-                                FirebaseVisionBarcode.FORMAT_CODE_93,
-                                FirebaseVisionBarcode.FORMAT_CODE_128)
+        FirebaseVisionCloudDetectorOptions options =
+                new FirebaseVisionCloudDetectorOptions.Builder()
+                        .setModelType(FirebaseVisionCloudDetectorOptions.LATEST_MODEL)
+                        .setMaxResults(15)
                         .build();
-
-
 
         mCapture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dispatchTakePictureIntent();
-
             }
         });
 
         mObject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent translate_intent = new Intent(MainActivity.this, ObjectLabel.class);
+                Intent translate_intent = new Intent(MonumentActivity.this, ObjectLabel.class);
                 startActivity(translate_intent);
                 finish();
             }
         });
 
-        mMonument.setOnClickListener(new View.OnClickListener() {
+        mQRCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent monument_intent = new Intent(MainActivity.this, MonumentActivity.class);
+                Intent monument_intent = new Intent(MonumentActivity.this, MainActivity.class);
                 startActivity(monument_intent);
                 finish();
             }
         });
+
 
     }
 
@@ -103,42 +101,37 @@ public class MainActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             imageBitmap = (Bitmap) extras.get("data");
             mImageView.setImageBitmap(imageBitmap);
-            scanCode();
+            recognizeLandmark();
         }
     }
 
-    private void scanCode() {
+    private void recognizeLandmark() {
 
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(imageBitmap);
-        FirebaseVisionBarcodeDetector detector = FirebaseVision.getInstance().getVisionBarcodeDetector();
+        FirebaseVisionCloudLandmarkDetector detector = FirebaseVision.getInstance()
+                .getVisionCloudLandmarkDetector();
 
-        Task<List<FirebaseVisionBarcode>> result = detector.detectInImage(image)
-                .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionBarcode>>() {
+        Task<List<FirebaseVisionCloudLandmark>> result = detector.detectInImage(image)
+                .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionCloudLandmark>>() {
                     @Override
-                    public void onSuccess(List<FirebaseVisionBarcode> barcodes) {
-                        for (FirebaseVisionBarcode barcode: barcodes) {
-                            Rect bounds = barcode.getBoundingBox();
-                            Point[] corners = barcode.getCornerPoints();
+                    public void onSuccess(List<FirebaseVisionCloudLandmark> firebaseVisionCloudLandmarks) {
+                        for (FirebaseVisionCloudLandmark landmark: firebaseVisionCloudLandmarks) {
 
-                            String rawValue = barcode.getRawValue();
+                           // Rect bounds = landmark.getBoundingBox();
+                            String landmarkName = landmark.getLandmark();
+                           // String entityId = landmark.getEntityId();
+                           // float confidence = landmark.getConfidence();
 
-                            int valueType = barcode.getValueType();
-                            // See API reference for complete list of supported types
-                            switch (valueType) {
-                                case FirebaseVisionBarcode.TYPE_WIFI:
-                                  //  String ssid = barcode.getWifi().getSsid();
-                                    String password = barcode.getWifi().getPassword();
-                                  //  int type = barcode.getWifi().getEncryptionType();
-                                    mText.setText(password);
-                                    break;
-                                case FirebaseVisionBarcode.TYPE_URL:
-                                  //  String title = barcode.getUrl().getTitle();
-                                    String url = barcode.getUrl().getUrl();
-                                    mText.setText(url);
-                                    break;
-                                case FirebaseVisionBarcode.TYPE_ISBN:
-                                    String isbn = barcode.getDisplayValue();
-                                    mText.setText(isbn);
+                            mText.setText(landmarkName);
+
+                            // Multiple locations are possible, e.g., the location of the depicted
+                            // landmark and the location the picture was taken.
+                            for (FirebaseVisionLatLng loc: landmark.getLocations()) {
+                                double latitude = loc.getLatitude();
+                                double longitude = loc.getLongitude();
+
+                                mLong.setText((int) longitude);
+                                mLat.setText((int) latitude);
 
                             }
                         }
@@ -147,12 +140,11 @@ public class MainActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(MainActivity.this, "Error: " + e, Toast.LENGTH_LONG).show();
+                        Toast.makeText(MonumentActivity.this, "Error: " + e, Toast.LENGTH_LONG).show();
                     }
                 });
+
 
     }
 
 }
-
-

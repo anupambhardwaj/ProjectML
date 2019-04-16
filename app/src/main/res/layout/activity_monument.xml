@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
+    android:orientation="vertical"
+    tools:context=".MonumentActivity">
 
     <ImageView
         android:id="@+id/imageView"
@@ -26,51 +26,72 @@
         android:textSize="30sp"
         tools:textColor="@android:color/background_light" />
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="190dp"
+        android:layout_toStartOf="@+id/capture_monument"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textSize="26sp"
+        tools:textColor="@android:color/background_light" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_toEndOf="@+id/capture_monument"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textSize="26sp"
+        tools:textColor="@android:color/background_light" />
+
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/capture"
+        android:id="@+id/capture_monument"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
         android:clickable="true"
-        app:srcCompat="@android:drawable/ic_menu_camera"
-        android:focusable="true" />
-
-    <Button
-        android:id="@+id/qr_code"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@android:color/transparent"
-        android:text="@string/qr_code"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        app:srcCompat="@android:drawable/ic_menu_camera" />
 
     <Button
         android:id="@+id/monument_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent"
+        android:text="Monument"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/qr_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="41dp"
         android:background="@android:color/transparent"
-        android:text="@string/monument"
+        android:text="QR Code"
         android:textColor="#80ffffff"
         android:textSize="16sp" />
 
     <Button
-        android:id="@+id/translate_btn"
+        android:id="@+id/object_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_marginStart="41dp"
         android:background="@android:color/transparent"
-        android:text="@string/object"
+        android:text="Object"
         android:textColor="#80ffffff"
         android:textSize="16sp" />
-
 
 </RelativeLayout>
