@@ -1,5 +1,6 @@
 package anupam.com.projectml;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -27,10 +28,9 @@ public class ObjectLabel extends AppCompatActivity {
 
     private ImageView mImageView;
     private FloatingActionButton mCapture;
-    private Button mMonument;
-    private Button mObject;
-    private Button mQRCode;
     private TextView mText;
+    private Button mMonument;
+    private Button mQRCode;
     private Bitmap imageBitmap;
 
     @Override
@@ -41,7 +41,6 @@ public class ObjectLabel extends AppCompatActivity {
         mImageView = (ImageView)findViewById(R.id.imageView);
         mCapture = (FloatingActionButton) findViewById(R.id.capture);
         mMonument = (Button)findViewById(R.id.monument_btn);
-        mObject = (Button)findViewById(R.id.object_btn);
         mQRCode = (Button)findViewById(R.id.qr_code);
         mText = (TextView)findViewById(R.id.textView);
 
@@ -58,12 +57,10 @@ public class ObjectLabel extends AppCompatActivity {
             }
         });
 
-        mQRCode.setOnClickListener(new View.OnClickListener() {
+        mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent monument_intent = new Intent(ObjectLabel.this, MainActivity.class);
-                startActivity(monument_intent);
-                finish();
+                objectLabel();
             }
         });
 
@@ -72,6 +69,15 @@ public class ObjectLabel extends AppCompatActivity {
             public void onClick(View view) {
                 Intent monument_intent = new Intent(ObjectLabel.this, MonumentActivity.class);
                 startActivity(monument_intent);
+                finish();
+            }
+        });
+
+        mQRCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent qrCode_intent = new Intent(ObjectLabel.this, MainActivity.class);
+                startActivity(qrCode_intent);
                 finish();
             }
         });
@@ -94,23 +100,25 @@ public class ObjectLabel extends AppCompatActivity {
             Bundle extras = data.getExtras();
             imageBitmap = (Bitmap) extras.get("data");
             mImageView.setImageBitmap(imageBitmap);
-            objectLabel();
+
         }
     }
 
     private void objectLabel() {
 
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(imageBitmap);
-        FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance()
-                .getCloudImageLabeler();
+        FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance().getOnDeviceImageLabeler();
 
         labeler.processImage(image)
                 .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionImageLabel>>() {
+                    @SuppressLint("ResourceAsColor")
                     @Override
                     public void onSuccess(List<FirebaseVisionImageLabel> labels) {
                         for (FirebaseVisionImageLabel label: labels) {
                             String text = label.getText();
                             mText.setText(text);
+                            //mText.setTextColor(R.color.colorAccent);
+
                         }
                     }
                 })

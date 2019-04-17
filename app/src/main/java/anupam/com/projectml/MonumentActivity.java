@@ -30,7 +30,6 @@ public class MonumentActivity extends AppCompatActivity {
 
     private ImageView mImageView;
     private FloatingActionButton mCapture;
-    private Button mMonument;
     private Button mObject;
     private Button mQRCode;
     private TextView mText;
@@ -45,7 +44,6 @@ public class MonumentActivity extends AppCompatActivity {
 
         mImageView = (ImageView)findViewById(R.id.imageView);
         mCapture = (FloatingActionButton) findViewById(R.id.capture);
-        mMonument = (Button)findViewById(R.id.monument_btn);
         mObject = (Button)findViewById(R.id.object_btn);
         mQRCode = (Button)findViewById(R.id.qr_code);
         mText = (TextView)findViewById(R.id.textView);
@@ -62,6 +60,13 @@ public class MonumentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dispatchTakePictureIntent();
+            }
+        });
+
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recognizeLandmark();
             }
         });
 

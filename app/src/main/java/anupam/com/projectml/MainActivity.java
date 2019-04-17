@@ -28,13 +28,12 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ImageView mImageView;
     private FloatingActionButton mCapture;
-    private Button mMonument;
-    private Button mObject;
-    private Button mQRCode;
+    private ImageView mImageView;
     private TextView mText;
     private Bitmap imageBitmap;
+    private Button mObject;
+    private Button mMonument;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
         mImageView = (ImageView)findViewById(R.id.imageView);
         mCapture = (FloatingActionButton) findViewById(R.id.capture);
-        mMonument = (Button)findViewById(R.id.monument_btn);
-        mObject = (Button)findViewById(R.id.object_btn);
-        mQRCode = (Button)findViewById(R.id.qr_code);
+        mMonument = (Button) findViewById(R.id.monument_btn);
+        mObject = findViewById(R.id.object_btn);
         mText = (TextView)findViewById(R.id.textView);
 
         FirebaseVisionBarcodeDetectorOptions options =
@@ -68,11 +66,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mObject.setOnClickListener(new View.OnClickListener() {
+        mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent translate_intent = new Intent(MainActivity.this, ObjectLabel.class);
-                startActivity(translate_intent);
+                scanCode();
+            }
+        });
+
+         mObject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent object_intent = new Intent(MainActivity.this, ObjectLabel.class);
+                startActivity(object_intent);
                 finish();
             }
         });
@@ -85,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -103,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             imageBitmap = (Bitmap) extras.get("data");
             mImageView.setImageBitmap(imageBitmap);
-            scanCode();
+
         }
     }
 
